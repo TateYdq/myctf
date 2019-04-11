@@ -1,0 +1,13 @@
+POST /sql/ HTTP/1.1
+Host: 123.206.87.240:9001
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:66.0) Gecko/20100101 Firefox/66.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate
+Referer: http://123.206.87.240:9001/sql/
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 54
+Connection: close
+Upgrade-Insecure-Requests: 1
+
+admin_name=admin123&admin_passwd=23333&submit=GO+GO+GO
