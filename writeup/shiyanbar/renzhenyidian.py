@@ -5,13 +5,6 @@ def extract(rawstr):
     newstr = rawstr.replace(' ',chr(0x0a)).replace('or','oorr')
     return newstr
 
-def addslashes(c):
-    strs = ['\'','\\','\"']
-    if c in strs:
-        return '\\'+c
-    else:
-        return c
-
 def main():
     url=r'http://ctf5.shiyanbar.com/web/earnest/index.php'
     ss=requests.session()

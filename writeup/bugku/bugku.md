@@ -1,6 +1,6 @@
 1、你从哪里来
 
-![image-20190325123948689](/Users/yu_daoqing/Library/Application Support/typora-user-images/image-20190325123948689.png)
+![image-20190325123948689](bugku.assets/image-20190325123948689.png)
 
 
 
@@ -8,7 +8,7 @@
 
 肯定是判断Referer头，在请求头中加入Referer:https://www.google.com即可。（注意不是https://www.google.com/）
 
-![image-20190325125100128](/Users/yu_daoqing/Library/Application Support/typora-user-images/image-20190325125100128.png)
+![image-20190325125100128](bugku.assets/image-20190325125100128.png)
 
 
 
@@ -55,6 +55,66 @@ flag出现
 题目开始时提示大写，所以flag为CTF{WHATFK}
 
 
+
+3、请从本地访问
+
+http://123.206.87.240:8002/localhost/
+
+![image-20190408230713059](bugku.assets/image-20190408230713059.png)
+
+思路：
+
+改http请求头
+
+先改Referer:
+
+![image-20190408231823714](bugku.assets/image-20190408231823714.png)
+
+发现没有用
+
+再改X-Forwarded-For:
+
+![image-20190408231937482](bugku.assets/image-20190408231937482.png)
+
+
+
+4、管理员系统
+
+网站：http://123.206.31.85:1003/
+
+先查看源代码发现源代码最下面有一行
+
+```
+<!-- dGVzdDEyMw== -->
+```
+
+用base64解码为test123,可能为账号或密码
+
+随便输入结果：
+
+![image-20190408232309595](bugku.assets/image-20190408232309595.png)
+
+可以看到，两个关键信息：
+
+(1)ip记录->X-Forwarded-For
+
+(2)本地管理员->localhost,127.0.0.1 admin
+
+
+
+先加X-Forwarded-For请求头：
+
+
+
+![image-20190408232500722](bugku.assets/image-20190408232500722.png)
+
+发现返回信息变化了
+
+将user改为admin,pass改为test123尝试:
+
+![image-20190408233014095](bugku.assets/image-20190408233014095.png)
+
+成功,flag为flag{85ff2ee4171396724bae20c0bd851f6b}
 
 
 
