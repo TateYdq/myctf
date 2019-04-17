@@ -1,4 +1,5 @@
 #-*- coding:utf-8 -*-
+#md5扩展长度攻击题
 import requests
 import hashpumpy
 import urllib
