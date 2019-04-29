@@ -27,6 +27,14 @@
 
 
 1.3 本地JS代码审计
+
+
+1.4 修改请求头
+Referef:
+X-Forwarded-For:
+User-Agent:
+Accept-Language:
+
 ### 三.目录扫描
 1. 敏感文件扫描
 工具：[dirsearch](https://github.com/maurosoria/dirsearch),御剑
@@ -45,6 +53,9 @@ vim -r 交换文件还原
 ```
 
 ### 四.sql注入
+
+sqlmap -u {url} --batch -v {number} --level {number} --dump
+
 1. 基于查询类型划分
 
     1.1. 数字型注入
@@ -56,6 +67,9 @@ vim -r 交换文件还原
     2.1. union注入
 
     2.2. 报错注入
+
+    concat(0x3e,(),0x3e)
+    updatexml(0x3e,(),0x3e)
 
     2.3. 盲注
 

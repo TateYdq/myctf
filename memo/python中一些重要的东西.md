@@ -8,3 +8,12 @@
 2.optparse模块
 parser.add_option() #增加参数，参数一:-+字符;参数二：--+名词;参数action，储存方式;参数type，代表输入参数的类型;参数dest，代表目标参数名字
 option,args = parser.parser_args()  #解析所有参数
+
+
+3.
+utf-8转二进制:
+binascii.b2a_hex
+
+
+4.base64解密
+base64.b64decode
