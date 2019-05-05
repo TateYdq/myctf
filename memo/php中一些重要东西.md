@@ -21,3 +21,10 @@ print()  #只能打印出简单类型变量
 print_r() #可以打印出复杂类型变量，包括对象，数组等
 echo  #输出一个或多个字符串
 var_dump() 输出变量的类型或字符串的内容，常用来调试
+
+
+
+5.转义函数
+
+htmlentities  把指定要转换的字符转为html实体（&#xxx）
+addslashes<>stripslashes   添加和删除反斜杠

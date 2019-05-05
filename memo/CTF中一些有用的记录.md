@@ -54,3 +54,8 @@ curl url   #获取网页内容
 特殊方法:
 上传文件：
 curl --form upload=@[filename] --form [submit_name]=[submit_value] [URL]
+
+
+6.
+git产生的 .git/
+vim产生的 .filename.swp
