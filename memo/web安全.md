@@ -1,4 +1,4 @@
-##
+<h1><center>web安全</center></h1>
 
 ### 一.隐藏信息
 1. 源代码隐藏关键信息
@@ -24,6 +24,27 @@
 
 
 1.2 md5扩展长度攻击
+
+介绍：
+
+题目不告诉你key,但提供了data以及md5(key.data)的值
+
+让你求md5(key.data.others)的值
+
+
+
+工具：
+
+- HashPump（linux工具），使用方法：hashpump -s [SIGNATURE] -d [DATA] -k [KEY_LENGTH] -a [DATA_ADD]
+
+  通常DATA_ADD可随意指定。
+
+
+
+- hashpumpy库(python)
+
+
+
 
 
 1.3 本地JS代码审计
@@ -77,7 +98,7 @@ sqlmap -u {url} --batch -v {number} --level {number} --dump
     2.3. 盲注
 
         2.3.1. 布尔盲注
-
+    
         2.3.2. 时间盲注
 
 3. 基于字段划分:
@@ -91,26 +112,26 @@ sqlmap -u {url} --batch -v {number} --level {number} --dump
     3.4. 基于数据库划分
 
         3.4.1. mysql
-
+    
         3.4.2. sqlite
-
+    
         3.4.3. access
 
     3.4.绕过方法
         3.4.1. 空格
 
         3.4.2. 引号
-
+    
         3.4.3. 注释
          1. 可以用引号连接后面的引号代替注释,and ''=',and '1'='1
          2. %23代替#
          3. --+
          4. /*    */(比较特殊，一般用在双关键字查询)
-
+    
         3.4.4. 关键字
          1. 外重写,select->seleselectct
          2. 内联注释,\/\*!\*\/
-
+    
         3.4.5. 常用函数
 
 ### 五.XSS
