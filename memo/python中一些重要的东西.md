@@ -17,3 +17,14 @@ binascii.b2a_hex
 
 4.base64解密
 base64.b64decode
+
+5.md5加密
+import hashlib
+m1=hashlib.md5()
+m1.update(str)
+m1.hexdigest()
+
+6.十六进制和字符串互转
+python2:
+.decode('hex')
+.encode('hex')
